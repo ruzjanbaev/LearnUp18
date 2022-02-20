@@ -46,7 +46,7 @@ public class TicketService {
     public boolean allToStringTicket() {
         //System.out.println("allToStringTicket: " + ticketMap.toString());
         for (Ticket s : ticketMap.values()) {
-            System.out.println("-->  Билет : " + s.getName() + ". Премьера(Событие) : " + s.getPremiereName());
+            System.out.println("--> Билет : " + s.getName() + ". Премьера(Событие) : " + s.getPremiereName());
         }
         return true;
     }
@@ -55,7 +55,7 @@ public class TicketService {
         //System.out.println("allToStringTicket: " + ticketMap.toString());
         for (Ticket s : ticketMap.values()) {
             if (s.getPremiereName() == premiereName) {
-                System.out.println("-->  Билет : " + s.getName() + ". Премьера(Событие) : " + s.getPremiereName());
+                System.out.println("----> Билет : " + s.getName() + ". Премьера(Событие) : " + s.getPremiereName());
             }
         }
         return true;

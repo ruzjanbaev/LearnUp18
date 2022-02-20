@@ -11,7 +11,7 @@ import java.util.HashMap;
 public class PremiereService {
 
     private Logger logger;
-    static private HashMap<String, Premiere> premiereArrayList = null;
+    static private HashMap<String, Premiere> premiereArrayList =  new HashMap<String, Premiere>();
 
     //@Autowired
     public PremiereService(Logger logger) {
@@ -22,9 +22,6 @@ public class PremiereService {
     public Premiere insPremiere(String name, String description, String ageCategory, Integer countFreeSeats) {
         logger.print("insPremiere: " + name);
         Premiere premiere = new Premiere(name, description, ageCategory, countFreeSeats, countFreeSeats);
-        if (premiereArrayList == null) {
-            premiereArrayList = new HashMap<String, Premiere>();
-        }
         premiereArrayList.put(name, premiere);
         return premiere;
     }
