@@ -29,6 +29,8 @@ public class PremiereService {
     //Удаление
     public boolean delPremiere(String name) {
         logger.print("delPremiere name: " + name);
+        TicketService ticketService = new TicketService(logger);
+        ticketService.delTicketPremiere(name);
         premiereArrayList.remove(name);
         return true;
     }

@@ -34,6 +34,7 @@ public class AviasalesApplication {
         System.out.println(":::::::::::::::::::::::::::::::::::::::::::::::::::::::::");
         ctx.getBean(PremiereService.class).delPremiere("Premiere_Name_2");
         ctx.getBean(PremiereService.class).allToStringPremiere();
+        ctx.getBean(TicketService.class).allToStringTicket();
         System.out.println(":::::::::::::::::::::::::::::::::::::::::::::::::::::::::");
         ctx.getBean(PremiereService.class).oneToStringPremiere("Premiere_Name_1", true);
 

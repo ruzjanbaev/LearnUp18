@@ -1,6 +1,7 @@
 package ru.learnup18.aviasales.services;
 
 import org.springframework.stereotype.Service;
+import ru.learnup18.aviasales.model.Premiere;
 import ru.learnup18.aviasales.model.Ticket;
 import ru.learnup18.aviasales.services.interfaces.Logger;
 
@@ -10,7 +11,7 @@ import java.util.HashMap;
 public class TicketService {
 
     private Logger logger;
-    static private HashMap<String, Ticket> ticketMap = null;
+    static private HashMap<String, Ticket> ticketMap = new HashMap<String, Ticket>();
 
     //@Autowired
     public TicketService(Logger logger) {
@@ -39,6 +40,17 @@ public class TicketService {
         PremiereService premiereService = new PremiereService(logger);
         if (premiereService.incSeatsRealPremiere(premiereName, 1)) {
             ticketMap.remove(name);
+        }
+        return true;
+    }
+    public boolean delTicketPremiere(String premiereName) {
+        logger.print("delTicket premiereName: " + premiereName);
+        HashMap<String, Ticket> ticketMapTmp = new HashMap<String, Ticket>();
+        ticketMapTmp = (HashMap) ticketMap.clone();
+        for (Ticket s : ticketMapTmp.values()) {
+            if (s.getPremiereName() == premiereName) {
+                ticketMap.remove(s.getName());
+            }
         }
         return true;
     }
