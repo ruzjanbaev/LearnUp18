@@ -6,6 +6,6 @@ import lombok.Data;
 @AllArgsConstructor
 @Data
 public class Ticket {
-    private String name;
+    private String name; //Ключь и имя
     private String premiereName; //Ссылка на примьеру
 }

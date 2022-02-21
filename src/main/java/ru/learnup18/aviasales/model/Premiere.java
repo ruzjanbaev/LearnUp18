@@ -9,7 +9,7 @@ import java.util.HashMap;
 @Data
 public class Premiere extends HashMap {
 
-    private String name; //Предпологаем что имя иникально, и является ключом
+    private String name; //Предпологаем что имя уникально, и является ключом
     private String description;
     private String ageCategory;
     private Integer countFreeSeats;
