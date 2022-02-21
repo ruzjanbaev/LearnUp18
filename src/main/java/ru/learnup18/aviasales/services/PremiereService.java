@@ -11,7 +11,7 @@ import java.util.HashMap;
 public class PremiereService {
 
     private Logger logger;
-    static private HashMap<String, Premiere> premiereArrayList =  new HashMap<String, Premiere>();
+    static private HashMap<String, Premiere> premiereMap =  new HashMap<String, Premiere>();
 
     //@Autowired
     public PremiereService(Logger logger) {
@@ -22,7 +22,7 @@ public class PremiereService {
     public Premiere insPremiere(String name, String description, String ageCategory, Integer countFreeSeats) {
         logger.print("insPremiere: " + name);
         Premiere premiere = new Premiere(name, description, ageCategory, countFreeSeats, countFreeSeats);
-        premiereArrayList.put(name, premiere);
+        premiereMap.put(name, premiere);
         return premiere;
     }
 
@@ -31,48 +31,48 @@ public class PremiereService {
         logger.print("delPremiere name: " + name);
         TicketService ticketService = new TicketService(logger);
         ticketService.delTicketPremiere(name);
-        premiereArrayList.remove(name);
+        premiereMap.remove(name);
         return true;
     }
 
     //Обновление - Предпологаем что имя Премьеры, это уникальное имя
     public boolean updPremiere(String name, String description, String ageCategory) {
         logger.print("updPremiere: " + Arrays.toString(new String[]{name, description, ageCategory}));
-        premiereArrayList.get(name).setDescription(description);
-        premiereArrayList.get(name).setAgeCategory(ageCategory);
+        premiereMap.get(name).setDescription(description);
+        premiereMap.get(name).setAgeCategory(ageCategory);
         return true;
     }
 
     //При покупке или продаже билета, мы уменьшаем или увеличиваем реальное количество
     public boolean incSeatsRealPremiere(String name, Integer incTicket) {
-        int freeSeats = premiereArrayList.get(name).getCountFreeSeats();
-        int freeReal = premiereArrayList.get(name).getCountFreeReal();
+        int freeSeats = premiereMap.get(name).getCountFreeSeats();
+        int freeReal = premiereMap.get(name).getCountFreeReal();
         if ((freeReal + incTicket) < 1) {
             logger.print("Ошибка, невозможно сдать билет!");
         } else if ((freeReal + incTicket) > freeSeats) {
             logger.print("Ошибка, невозможно купить билет!");
         } else {
             logger.print("freeSeats: " + freeSeats + ", freeReal: " + freeReal + ", (freeReal + incTicket): " + (freeReal + incTicket));
-            premiereArrayList.get(name).setCountFreeReal(freeReal + incTicket);
+            premiereMap.get(name).setCountFreeReal(freeReal + incTicket);
             return true;
         }
         return false;
     }
 
     public boolean allToStringPremiere() {
-        for (Premiere s : premiereArrayList.values()) {
+        for (Premiere s : premiereMap.values()) {
             oneToStringPremiere(s.getName(), false);
         }
         return true;
     }
 
     public boolean oneToStringPremiere(String name, boolean ticket) {
-        //System.out.println("premiereArrayList: " + premiereArrayList.toString());
-        System.out.println("--> Премьера(Событие) : " + premiereArrayList.get(name).getName() +
-                ", описание : " + premiereArrayList.get(name).getDescription() +
-                ", возрастная категория : " + premiereArrayList.get(name).getAgeCategory() +
-                ", кол-о дост-х мест : " + premiereArrayList.get(name).getCountFreeReal() +
-                ", изначальное кол-о дост-х мест : " + premiereArrayList.get(name).getCountFreeSeats());
+        //System.out.println("premiereMap: " + premiereMap.toString());
+        System.out.println("--> Премьера(Событие) : " + premiereMap.get(name).getName() +
+                ", описание : " + premiereMap.get(name).getDescription() +
+                ", возрастная категория : " + premiereMap.get(name).getAgeCategory() +
+                ", кол-о дост-х мест : " + premiereMap.get(name).getCountFreeReal() +
+                ", изначальное кол-о дост-х мест : " + premiereMap.get(name).getCountFreeSeats());
         if (ticket) {
             TicketService ticketService = new TicketService(logger);
             ticketService.allToStringTicket(name);
