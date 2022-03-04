@@ -1,75 +1,80 @@
 package ru.learnup18.aviasales.services;
 
+import org.springframework.beans.BeansException;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.ApplicationContextAware;
 import org.springframework.stereotype.Service;
-import ru.learnup18.aviasales.model.Premiere;
 import ru.learnup18.aviasales.model.Ticket;
 import ru.learnup18.aviasales.services.interfaces.Logger;
 
 import java.util.HashMap;
 
 @Service
-public class TicketService {
+public class TicketService implements ApplicationContextAware {
 
     private Logger logger;
-    static private HashMap<String, Ticket> ticketMap = new HashMap<String, Ticket>();
+    private ApplicationContext ctx;
+    private HashMap<String, Ticket> ticketMap;
 
-    //@Autowired
-    public TicketService(Logger logger) {
+    @Autowired
+    private PremiereService premiereService;
+
+    @Autowired
+    public void TicketService(Logger logger, HashMap ticketMap) {
         this.logger = logger;
+        this.ticketMap = ticketMap;
     }
 
     //Добавление - покупка
-    public Ticket insTicket(String name, String premiereName) {
-        logger.print("insTicket: " + name);
-        Ticket ticket = null;
-        PremiereService premiereService = new PremiereService(logger);
+    public void insTicket(Ticket ticket) {
+        logger.print("insTicket: " + ticket.getName());
         // кргда покупк, билет минус один
-        if (premiereService.incSeatsRealPremiere(premiereName, -1)) {
-            ticket = new Ticket(name, premiereName);
-            if (ticketMap == null) {
-                ticketMap = new HashMap<String, Ticket>();
-            }
-            ticketMap.put(name, ticket);
+        if (premiereService.incSeatsRealPremiere(ticket.getPremiereName(), -1)) {
+            ticketMap.put(ticket.getName(), ticket);
         }
-        return ticket;
     }
 
     //Удаление - сдать билет
-    public boolean delTicket(String name, String premiereName) {
+    public void delTicket(String name, String premiereName) {
         logger.print("delTicket: " + name);
-        PremiereService premiereService = new PremiereService(logger);
         if (premiereService.incSeatsRealPremiere(premiereName, 1)) {
             ticketMap.remove(name);
         }
-        return true;
     }
-    public boolean delTicketPremiere(String premiereName) {
+    public void delTicketPremiere(String premiereName) {
         logger.print("delTicket premiereName: " + premiereName);
-        HashMap<String, Ticket> ticketMapTmp = new HashMap<String, Ticket>();
-        ticketMapTmp = (HashMap) ticketMap.clone();
+        if (ticketMap.isEmpty()) {
+            ticketMap = ctx.getBean(TicketService.class).ticketMap;
+        }
+        HashMap<String, Ticket> ticketMapTmp = (HashMap<String, Ticket>) ticketMap.clone();
         for (Ticket s : ticketMapTmp.values()) {
             if (s.getPremiereName() == premiereName) {
                 ticketMap.remove(s.getName());
             }
         }
-        return true;
     }
 
-    public boolean allToStringTicket() {
-        //System.out.println("allToStringTicket: " + ticketMap.toString());
+    public void allToStringTicket() {
         for (Ticket s : ticketMap.values()) {
             System.out.println("--> Билет : " + s.getName() + ". Премьера(Событие) : " + s.getPremiereName());
         }
-        return true;
     }
 
-    public boolean allToStringTicket(String premiereName) {
-        //System.out.println("allToStringTicket: " + ticketMap.toString());
+    public void allToStringTicket(String premiereName) {
+        if (ticketMap.isEmpty()) {
+            ticketMap = ctx.getBean(TicketService.class).ticketMap;
+        }
         for (Ticket s : ticketMap.values()) {
             if (s.getPremiereName() == premiereName) {
                 System.out.println("----> Билет : " + s.getName() + ". Премьера(Событие) : " + s.getPremiereName());
             }
         }
-        return true;
     }
+
+    @Override
+    public void setApplicationContext(ApplicationContext ctx) throws BeansException {
+        this.ctx = ctx;
+    }
+
 }
